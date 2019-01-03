@@ -1,0 +1,56 @@
+body
+    font-family: $font
+
+html 
+  box-sizing: border-box
+  font-size: 16px
+  color: darken($darkgrey, 40%)
+
+*,
+*:before,
+*:after 
+  box-sizing: inherit
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul 
+  margin: 0
+  padding: 0
+  font-weight: normal
+
+ol,
+ul 
+  list-style: none
+
+img 
+  max-width: 100%
+  height: auto
+
+label
+  display:block
+  width: 50%
+  
+
+input, select
+  height: 36px
+  padding: 3px 7px
+  border: 1.3px solid $lightgrey
+  outline: none
+
+select
+  margin: 
+    bottom: 13px
+    left: 10px
+    right: 10px
+  -webkit-appearance: button
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/></svg>') no-repeat right
+
+option:active
+  color:red

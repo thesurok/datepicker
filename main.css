@@ -1,0 +1,68 @@
+.wrapper {
+  height: 480px;
+  width: 480px;
+  background-color: lightgray;
+}
+
+.header {
+  height: 40px;
+  border-bottom: 1px solid grey;
+}
+
+.select {
+  display: block;
+  width: 80%;
+  margin: 10px auto;
+}
+
+.range-picker {
+  border: 1px solid grey;
+  width: 33%;
+  height: 40px;
+  margin: 10px 10%;
+}
+
+.modal {
+  display: block;
+  height: 170px;
+  width: 460px;
+  background-color: darkgray;
+  margin: 10px 0 0 10px;
+  position: relative;
+}
+
+#modal-month {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+.nav-arrow {
+  position: absolute;
+  cursor: pointer;
+}
+
+#go-bck {
+  top: 5px;
+  left: 10px;
+}
+#go-fwd {
+  top: 5px;
+  right: 10px;
+}
+
+#day-table {
+  width: 460px;
+  text-align: center;
+}
+
+.weekday-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 25px;
+}
+
+.weekday-body {
+  display: block;
+  cursor: pointer;
+}
