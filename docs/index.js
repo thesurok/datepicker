@@ -1,6 +1,6 @@
 const datePicker = {
   state: {
-    currentDay: moment(),
+    currentDate: moment(),
     daysInCurrentMonth: moment().daysInMonth()
   },
 
@@ -14,20 +14,6 @@ const datePicker = {
       "Last 90 days"
     ],
     timezones,
-    months: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ],
     weekDays: [
       "Sunday",
       "Monday",
@@ -109,7 +95,7 @@ const datePicker = {
     const rangeStart = $({
       el: "input",
       cls: "range-picker",
-      id: "from",
+      id: "input-range-start",
       append: rangeStartLabel
     });
     //To:
@@ -127,7 +113,7 @@ const datePicker = {
     const rangeEnd = $({
       el: "input",
       cls: "range-picker",
-      id: "to",
+      id: "input-range-end",
       append: rangeEndLabel
     });
     //Buttons
@@ -159,29 +145,30 @@ const datePicker = {
 
   setHeaderDate() {
     const header = document.querySelector(".header");
-    header.innerHTML = this.state.currentDay.format("MMM DD");
+    header.innerHTML = this.state.currentDate.format("MMM DD");
   },
 
   buildModal(pos) {
-    const $ = this.helpers.$;
+    const $ = this.helpers.$,
+      id = pos.slice(1);
     const modal = $({
       el: "div",
       cls: "modal",
-      id: `modal-${pos.slice(1)}`,
+      id: `modal-${id}`,
       append: document.querySelector(pos)
     });
     // Current month
     const currentMonth = $({
       el: "span",
-      id: "modal-month",
+      id: `modal-month-${id}`,
       append: modal,
-      ihtml: this.state.currentDay.format("MMMM YYYY")
+      ihtml: this.state.currentDate.format("MMMM YYYY")
     });
     // '<' button
     const prevMonth = $({
       el: "span",
       cls: "nav-arrow",
-      id: "go-bck",
+      id: `go-bck-${id}`,
       append: modal,
       ihtml: "<"
     });
@@ -189,7 +176,7 @@ const datePicker = {
     const nextMonth = $({
       el: "span",
       cls: "nav-arrow",
-      id: "go-fwd",
+      id: `go-fwd-${id}`,
       append: modal,
       ihtml: ">"
     });
@@ -210,25 +197,26 @@ const datePicker = {
     //Create main table container
     $({
       el: "table",
-      id: "day-table",
+      id: `day-table-${id}`,
       append: modal
     });
-    this.buildPicker();
+    this.buildPicker(pos);
   },
 
-  buildPicker() {
+  buildPicker(pos) {
     const $ = this.helpers.$,
-      modal = $(".modal");
+      id = pos.slice(1);
+    modal = $(`#modal-${id}`);
 
     //Create a table where all the days go
-    const daysTable = $("#day-table");
+    const daysTable = $(`#day-table-${id}`);
     daysTable.innerHTML = "";
     //Offset is used to fill the empty cells
-    let offset = this.state.currentDay.startOf("month").day(),
+    let offset = this.state.currentDate.startOf("month").day(),
       dayCount = 1;
     //Create 5 rows
     for (let i = 0; i < 5; i++) {
-      $({ el: "tr", id: `row-${i}`, append: daysTable });
+      $({ el: "tr", id: `row-${id}-${i}`, append: daysTable });
       //Create 7 cells which represent corresponding weekday for each row
       for (let k = 0; k < 7; k++) {
         /*
@@ -238,8 +226,8 @@ const datePicker = {
         if (!offset) {
           $({
             el: "td",
-            id: `day-${dayCount}`,
-            append: $(`#row-${i}`),
+            id: `day-${id}-${dayCount}`,
+            append: $(`#row-${id}-${i}`),
             ihtml: dayCount
           });
           if (dayCount >= this.state.daysInCurrentMonth) {
@@ -247,7 +235,7 @@ const datePicker = {
           }
           dayCount++;
         } else {
-          $({ el: "td", append: $(`#row-${i}`) });
+          $({ el: "td", append: $(`#row-${id}-${i}`) });
           offset--;
         }
       }
@@ -259,35 +247,39 @@ const datePicker = {
     root.appendChild(this.buildContainer());
   },
 
-  listenChangeMonth() {
-    const $ = this.helpers.$;
-    $("#go-fwd").addEventListener("click", () => {
-      this.state.currentDay = this.state.currentDay.add(1, "month");
-      this.refreshPicker();
+  listenChangeMonth(pos) {
+    const $ = this.helpers.$,
+      id = pos.slice(1);
+    $(`#go-fwd-${id}`).addEventListener("click", () => {
+      this.state.currentDate = this.state.currentDate.add(1, "month");
+      this.refreshPicker(pos);
     });
-    $("#go-bck").addEventListener("click", () => {
-      this.state.currentDay = this.state.currentDay.subtract(1, "month");
-      this.refreshPicker();
+    $(`#go-bck-${id}`).addEventListener("click", () => {
+      this.state.currentDate = this.state.currentDate.subtract(1, "month");
+      this.refreshPicker(pos);
     });
   },
 
-  listenToggleModal() {
-    const $ = this.helpers.$;
+  refreshPicker(pos) {
+    $ = this.helpers.$;
+    this.state.daysInCurrentMonth = this.state.currentDate.daysInMonth();
+    $(`#modal-month-${pos.slice(1)}`).innerHTML = this.state.currentDate.format(
+      "MMMM YYYY"
+    );
+    this.buildPicker(pos);
+  },
+
+  listenToggleModal(pos) {
+    const $ = this.helpers.$,
+      id = pos.slice(7);
     $("body").addEventListener("click", e => {
       e.stopPropagation();
-      if (e.target === $("#from")) {
-        $("#modal-range-start").style.display = "block";
+      if (e.target === $(`#input-${id}`)) {
+        $(`#modal-${id}`).style.display = "block";
       } else {
-        $("#modal-range-start").style.display = "none";
+        $(`#modal-${id}`).style.display = "none";
       }
     });
-  },
-
-  refreshPicker() {
-    $ = this.helpers.$;
-    this.state.daysInCurrentMonth = this.state.currentDay.daysInMonth();
-    $("#modal-month").innerHTML = this.state.currentDay.format("MMMM YYYY");
-    this.buildPicker();
   },
 
   log() {
@@ -298,8 +290,11 @@ const datePicker = {
     this.root(root);
     this.setHeaderDate();
     this.buildModal("#range-start");
-    this.listenChangeMonth();
-    this.listenToggleModal();
+    this.buildModal("#range-end");
+    this.listenChangeMonth("#range-start");
+    this.listenChangeMonth("#range-end");
+    this.listenToggleModal("#input-range-start");
+    this.listenToggleModal("#input-range-end");
     this.log();
   }
 };

@@ -114,15 +114,15 @@ select {
 .nav-arrow {
   position: absolute; }
 
-#go-bck {
+#go-bck-range-start, #go-bck-range-end {
   top: 5px;
   left: 10px; }
 
-#go-fwd {
+#go-fwd-range-start, #go-fwd-range-end {
   top: 5px;
   right: 10px; }
 
-#modal-month {
+#modal-month-range-start, #modal-month-range-end {
   display: block;
   text-align: center;
   margin-top: 5px;
@@ -134,7 +134,7 @@ select {
   padding: 0 25px;
   margin: 10px 0; }
 
-#day-table {
+#day-table-range-start, #day-table-range-end {
   width: 360px;
   text-align: center;
   margin-bottom: 10px; }
